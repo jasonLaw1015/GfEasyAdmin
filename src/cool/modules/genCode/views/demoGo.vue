@@ -44,8 +44,8 @@
 					/>
 				</el-select>
 			</cl-filter>
-			<cl-filter label="类型:">
-				<el-select size="mini" v-model="condition.other" @change="typesChange">
+			<cl-filter label="其他状态:">
+				<el-select size="mini" v-model="condition.other" @change="otherChange">
 					<el-option value="" label="全部" />
 					<el-option
 						v-for="(item, k) in DictRef.DemoGoOtherDict"
@@ -64,6 +64,15 @@
 			<cl-table :ref="setRefs('table')" v-bind="table">
 				<template #column-pic="{ scope }">
 					<div v-for="(item, k) in scope.row.pic.split(',')" :key="k">
+						<el-image
+							style="width: 130px; height: 130px"
+							:src="item"
+							:preview-src-list="[item]"
+						/>
+					</div>
+				</template>
+				<template #column-tupian="{ scope }">
+					<div v-for="(item, k) in scope.row.tupian.split(',')" :key="k">
 						<el-image
 							style="width: 130px; height: 130px"
 							:src="item"
@@ -171,9 +180,10 @@ export default defineComponent({
 					prop: "tupian",
 					label: "图片",
 					component: {
-						name: "el-input",
+						name: "cl-upload-space-preview",
 						props: {
-							placeholder: "请输入图片"
+							text: "选择图片",
+							limit: 6
 						}
 					}
 				},
@@ -257,6 +267,7 @@ export default defineComponent({
 				{
 					prop: "tupian",
 					label: "图片",
+					width: 150,
 					align: "center"
 				},
 				{
@@ -285,9 +296,13 @@ export default defineComponent({
 			obj[key] = value;
 			refs.value.crud.refresh(obj);
 		}
-		// 搜索条件-类型更改
+		// 搜索条件-更改
 		function typesChange(value: any) {
 			onDataChange("types", value);
+		}
+		// 搜索条件-更改
+		function otherChange(value: any) {
+			onDataChange("other", value);
 		}
 		// 时间筛选
 		function dateChange(date: any) {
@@ -383,6 +398,7 @@ export default defineComponent({
 			table,
 			condition,
 			typesChange,
+			otherChange,
 			dateChange,
 			onUpsertInfo,
 			onUpsertSubmit,

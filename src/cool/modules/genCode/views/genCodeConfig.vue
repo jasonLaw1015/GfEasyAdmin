@@ -185,7 +185,7 @@ export default defineComponent({
 					}
 				},
 				{
-					prop: "ServerGenPath",
+					prop: "serverGenPath",
 					label: "生成代码服务端目录",
 					component: {
 						name: "el-input",
@@ -331,7 +331,7 @@ export default defineComponent({
 					align: "center"
 				},
 				{
-					prop: "ServerGenPath",
+					prop: "serverGenPath",
 					label: "生成代码服务端目录",
 					align: "center"
 				},

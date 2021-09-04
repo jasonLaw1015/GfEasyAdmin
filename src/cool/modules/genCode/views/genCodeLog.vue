@@ -445,9 +445,9 @@ export default defineComponent({
 						}
 					},
 					{
-						prop: "ServerGenPath",
+						prop: "serverGenPath",
 						label: "生成代码服务端目录",
-						value: row.ServerGenPath,
+						value: row.serverGenPath,
 						component: {
 							name: "el-input",
 							props: {
