@@ -3,6 +3,7 @@ import { Service, Permission, useService } from "./service";
 import { useRefs } from "./hook/core";
 import { useRouter } from "./router";
 import { useGoTo } from "./utils/router";
+import { useTools } from "./utils/tools";
 import { useModule } from "./module";
 import router from "/@/router";
 import store from "/@/store";
@@ -39,4 +40,14 @@ function usePermission(list: any[]) {
 	deep(services);
 }
 
-export { Service, Permission, BaseService, services, bootstrap, useRefs, usePermission, useGoTo };
+export {
+	Service,
+	Permission,
+	BaseService,
+	services,
+	bootstrap,
+	useRefs,
+	usePermission,
+	useGoTo,
+	useTools
+};

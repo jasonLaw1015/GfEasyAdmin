@@ -55,6 +55,17 @@
 					/>
 				</el-select>
 			</cl-filter>
+			<cl-filter label="其他状态:">
+				<el-select size="mini" v-model="condition.otherStr" @change="otherStrChange">
+					<el-option value="" label="全部" />
+					<el-option
+						v-for="(item, k) in DictRef.DemoGoOtherStrDict"
+						:key="k"
+						:value="item.value"
+						:label="item.label"
+					/>
+				</el-select>
+			</cl-filter>
 			<cl-flex1 />
 			<!-- 关键字搜索 -->
 			<cl-search-key />
@@ -104,24 +115,27 @@
 	</cl-crud>
 </template>
 <script lang="ts">
-import { defineComponent, inject, reactive } from "vue";
+import { defineComponent, inject, reactive, onBeforeMount, onMounted } from "vue";
 import { CrudLoad, Upsert, Table } from "cl-admin-crud-vue3/types";
-import { useRefs, useGoTo } from "/@/core";
+import { useRefs, useGoTo, useTools } from "/@/core";
 import * as Dict from "../dict/demoGo";
-// import { ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 export default defineComponent({
 	setup() {
 		const { refs, setRefs } = useRefs();
 		const { goTo } = useGoTo();
+		const { setTableUpsertOptions } = useTools();
 		// 请求服务
 		const service = inject<any>("service");
 		const DictRef = reactive<any>(Dict);
+		const DictOptions = reactive<any>({ baseSysRoleOptions: [], baseSysUserOptions: [] });
 		const condition = reactive<any>({
 			types: "",
 			status: "",
 			date: []
 		});
+
 		// 新增、编辑配置
 		const upsert = reactive<Upsert>({
 			items: [
@@ -208,6 +222,54 @@ export default defineComponent({
 							"controls-position": "right"
 						}
 					}
+				},
+				{
+					prop: "otherStr",
+					label: "其他状态",
+					component: {
+						name: "el-radio-group",
+						options: Dict.DemoGoOtherStrDict
+					}
+				},
+				{
+					prop: "baseSysRoleId",
+					label: "角色ID",
+					span: 12,
+					// hook: {
+					// 	bind: ["split", "number"],
+					// 	submit: "join"
+					// },
+					component: {
+						name: "el-select",
+						props: {
+							// multiple: true
+						},
+						options: []
+					},
+					rules: {
+						required: true,
+						message: "角色ID标题不能为空"
+					}
+				},
+				{
+					prop: "baseSysUserId",
+					label: "用户ID",
+					span: 12,
+					// hook: {
+					// 	bind: ["split", "number"],
+					// 	submit: "join"
+					// },
+					component: {
+						name: "el-select",
+						props: {
+							// multiple: true
+						},
+						options: []
+					},
+					rules: {
+						required: true,
+						message: "用户ID标题不能为空"
+					}
 				}
 			]
 		});
@@ -283,6 +345,24 @@ export default defineComponent({
 					align: "center"
 				},
 				{
+					prop: "otherStr",
+					label: "其他状态",
+					dict: Dict.DemoGoOtherStrDict,
+					align: "center"
+				},
+				{
+					prop: "baseSysRoleId",
+					label: "角色ID",
+					dict: DictOptions.baseSysRoleOptions,
+					align: "center"
+				},
+				{
+					prop: "baseSysUserId",
+					label: "用户ID",
+					dict: DictOptions.baseSysUserOptions,
+					align: "center"
+				},
+				{
 					label: "操作",
 					type: "op",
 					// buttons: ["slot-other", "edit", "delete"],
@@ -303,6 +383,10 @@ export default defineComponent({
 		// 搜索条件-更改
 		function otherChange(value: any) {
 			onDataChange("other", value);
+		}
+		// 搜索条件-更改
+		function otherStrChange(value: any) {
+			onDataChange("otherStr", value);
 		}
 		// 时间筛选
 		function dateChange(date: any) {
@@ -370,8 +454,10 @@ export default defineComponent({
 					}
 				],
 				on: {
+					// submt会调用onLoad的 ctx.service(service.demoGo).done();的update方法
 					submit: (data: any, { close, done }: any) => {
 						console.log(data, close, done);
+						ElMessage.success("提交成功");
 						// 	service.demoGo
 						// 		.xxx({
 						// 			id: row.id,
@@ -390,15 +476,47 @@ export default defineComponent({
 				}
 			});
 		}
+		//外键所需的options数据
+		async function getBaseSysRoleOptions() {
+			try {
+				const res = await service.base.system.role.list();
+				DictOptions.baseSysRoleOptions = res.map((i: any) => {
+					return { label: i.name || i.title || i.id, value: i.id };
+				});
+			} catch (error: any) {
+				ElMessage.error(error);
+			}
+		}
+		async function getBaseSysUserOptions() {
+			try {
+				const res = await service.base.system.user.list();
+				DictOptions.baseSysUserOptions = res.map((i: any) => {
+					return { label: i.name || i.title || i.id, value: i.id };
+				});
+			} catch (error: any) {
+				ElMessage.error(error);
+			}
+		}
+		onBeforeMount(async () => {
+			await getBaseSysRoleOptions();
+			await getBaseSysUserOptions();
+			//手动处理数据
+			setTableUpsertOptions(table, upsert, "baseSysRoleId", DictOptions.baseSysRoleOptions);
+			setTableUpsertOptions(table, upsert, "baseSysUserId", DictOptions.baseSysUserOptions);
+		});
+		onMounted(async () => {});
+
 		return {
 			refs,
 			setRefs,
 			upsert,
 			DictRef,
+			DictOptions,
 			table,
 			condition,
 			typesChange,
 			otherChange,
+			otherStrChange,
 			dateChange,
 			onUpsertInfo,
 			onUpsertSubmit,

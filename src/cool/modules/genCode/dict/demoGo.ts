@@ -38,6 +38,19 @@ export const DemoGoOtherDict: any[] = [
 		type: "success"
 	}
 ];
+//其他状态#s1:已激活,s2a2:未激活#IsDictColumn,IsSearchParams
+export const DemoGoOtherStrDict: any[] = [
+	{
+		label: "已激活",
+		value: "s1",
+		type: "primary"
+	},
+	{
+		label: "未激活",
+		value: "s2a2",
+		type: "success"
+	}
+];
 export const DefaultDict: any[] = [
 	{
 		label: "d1",
