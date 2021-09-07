@@ -84,19 +84,22 @@
 	</cl-crud>
 </template>
 <script lang="ts">
-import { defineComponent, inject, reactive } from "vue";
+import { defineComponent, inject, reactive, onBeforeMount, onMounted } from "vue";
 import { CrudLoad, Upsert, Table } from "cl-admin-crud-vue3/types";
-import { useRefs, useGoTo } from "/@/core";
+import { useRefs, useGoTo, useTools } from "/@/core";
 import * as Dict from "../dict/appGoodsInfo";
-// import { ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 export default defineComponent({
 	setup() {
 		const { refs, setRefs } = useRefs();
 		const { goTo } = useGoTo();
+		const { setTableUpsertOptions } = useTools();
 		// 请求服务
 		const service = inject<any>("service");
 		const DictRef = reactive<any>(Dict);
+		//外键的查询的options
+		const DictOptions = reactive<any>({});
 		const condition = reactive<any>({
 			types: "",
 			status: "",
@@ -127,10 +130,6 @@ export default defineComponent({
 						props: {
 							placeholder: "请输入副标题"
 						}
-					},
-					rules: {
-						required: true,
-						message: "副标题标题不能为空"
 					}
 				},
 				{
@@ -147,15 +146,15 @@ export default defineComponent({
 				{
 					prop: "sort",
 					label: "排序",
+					span: 12,
 					component: {
-						name: "el-input",
+						name: "el-input-number",
 						props: {
-							placeholder: "请输入排序"
+							placeholder: "请填写排序号",
+							min: 0,
+							max: 99,
+							"controls-position": "right"
 						}
-					},
-					rules: {
-						required: true,
-						message: "排序标题不能为空"
 					}
 				},
 				{
@@ -172,14 +171,6 @@ export default defineComponent({
 					component: {
 						name: "el-radio-group",
 						options: Dict.AppGoodsInfoStatusDict
-					}
-				},
-				{
-					prop: "sort",
-					label: "排序",
-					value: 0,
-					component: {
-						name: "el-input-number"
 					}
 				}
 			]
@@ -222,8 +213,8 @@ export default defineComponent({
 				{
 					prop: "pic",
 					label: "商品主图",
-					align: "center",
-					width: 150
+					width: 150,
+					align: "center"
 				},
 				{
 					prop: "sort",
@@ -257,7 +248,7 @@ export default defineComponent({
 			obj[key] = value;
 			refs.value.crud.refresh(obj);
 		}
-		// 搜索条件-类型更改
+		// 搜索条件-更改
 		function typesChange(value: any) {
 			onDataChange("types", value);
 		}
@@ -327,8 +318,10 @@ export default defineComponent({
 					}
 				],
 				on: {
+					//// submt会调用onLoad的 ctx.service(service.appGoodsInfo)).done();的update方法
 					submit: (data: any, { close, done }: any) => {
 						console.log(data, close, done);
+						ElMessage.success("提交成功");
 						// 	service.appGoodsInfo
 						// 		.xxx({
 						// 			id: row.id,
@@ -347,11 +340,15 @@ export default defineComponent({
 				}
 			});
 		}
+		//外键所需的options数据
+		onBeforeMount(async () => {});
+		onMounted(async () => {});
 		return {
 			refs,
 			setRefs,
 			upsert,
 			DictRef,
+			DictOptions,
 			table,
 			condition,
 			typesChange,

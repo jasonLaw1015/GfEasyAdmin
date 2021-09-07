@@ -55,7 +55,7 @@
 					/>
 				</el-select>
 			</cl-filter>
-			<cl-filter label="其他状态:">
+			<cl-filter label="其他状态2:">
 				<el-select size="mini" v-model="condition.otherStr" @change="otherStrChange">
 					<el-option value="" label="全部" />
 					<el-option
@@ -129,13 +129,15 @@ export default defineComponent({
 		// 请求服务
 		const service = inject<any>("service");
 		const DictRef = reactive<any>(Dict);
-		const DictOptions = reactive<any>({ baseSysRoleOptions: [], baseSysUserOptions: [] });
+		//外键的查询的options
+		const DictOptions = reactive<any>({
+			appGoodsInfoOptions: []
+		});
 		const condition = reactive<any>({
 			types: "",
 			status: "",
 			date: []
 		});
-
 		// 新增、编辑配置
 		const upsert = reactive<Upsert>({
 			items: [
@@ -225,50 +227,22 @@ export default defineComponent({
 				},
 				{
 					prop: "otherStr",
-					label: "其他状态",
+					label: "其他状态2",
 					component: {
 						name: "el-radio-group",
 						options: Dict.DemoGoOtherStrDict
 					}
 				},
 				{
-					prop: "baseSysRoleId",
-					label: "角色ID",
+					prop: "appGoodsInfoId",
+					label: "appGoodsInfoID",
 					span: 12,
-					// hook: {
-					// 	bind: ["split", "number"],
-					// 	submit: "join"
-					// },
 					component: {
 						name: "el-select",
 						props: {
 							// multiple: true
 						},
 						options: []
-					},
-					rules: {
-						required: true,
-						message: "角色ID标题不能为空"
-					}
-				},
-				{
-					prop: "baseSysUserId",
-					label: "用户ID",
-					span: 12,
-					// hook: {
-					// 	bind: ["split", "number"],
-					// 	submit: "join"
-					// },
-					component: {
-						name: "el-select",
-						props: {
-							// multiple: true
-						},
-						options: []
-					},
-					rules: {
-						required: true,
-						message: "用户ID标题不能为空"
 					}
 				}
 			]
@@ -346,20 +320,14 @@ export default defineComponent({
 				},
 				{
 					prop: "otherStr",
-					label: "其他状态",
+					label: "其他状态2",
 					dict: Dict.DemoGoOtherStrDict,
 					align: "center"
 				},
 				{
-					prop: "baseSysRoleId",
-					label: "角色ID",
-					dict: DictOptions.baseSysRoleOptions,
-					align: "center"
-				},
-				{
-					prop: "baseSysUserId",
-					label: "用户ID",
-					dict: DictOptions.baseSysUserOptions,
+					prop: "appGoodsInfoId",
+					label: "appGoodsInfoID",
+					dict: DictOptions.appGoodsInfoOptions,
 					align: "center"
 				},
 				{
@@ -454,7 +422,7 @@ export default defineComponent({
 					}
 				],
 				on: {
-					// submt会调用onLoad的 ctx.service(service.demoGo).done();的update方法
+					//// submt会调用onLoad的 ctx.service(service.demoGo)).done();的update方法
 					submit: (data: any, { close, done }: any) => {
 						console.log(data, close, done);
 						ElMessage.success("提交成功");
@@ -477,20 +445,10 @@ export default defineComponent({
 			});
 		}
 		//外键所需的options数据
-		async function getBaseSysRoleOptions() {
+		async function getAppGoodsInfoOptions() {
 			try {
-				const res = await service.base.system.role.list();
-				DictOptions.baseSysRoleOptions = res.map((i: any) => {
-					return { label: i.name || i.title || i.id, value: i.id };
-				});
-			} catch (error: any) {
-				ElMessage.error(error);
-			}
-		}
-		async function getBaseSysUserOptions() {
-			try {
-				const res = await service.base.system.user.list();
-				DictOptions.baseSysUserOptions = res.map((i: any) => {
+				const res = await service.appGoodsInfo.list();
+				DictOptions.appGoodsInfoOptions = res.map((i: any) => {
 					return { label: i.name || i.title || i.id, value: i.id };
 				});
 			} catch (error: any) {
@@ -498,14 +456,11 @@ export default defineComponent({
 			}
 		}
 		onBeforeMount(async () => {
-			await getBaseSysRoleOptions();
-			await getBaseSysUserOptions();
+			await getAppGoodsInfoOptions();
 			//手动处理数据
-			setTableUpsertOptions(table, upsert, "baseSysRoleId", DictOptions.baseSysRoleOptions);
-			setTableUpsertOptions(table, upsert, "baseSysUserId", DictOptions.baseSysUserOptions);
+			setTableUpsertOptions(table, upsert, "appGoodsInfoId", DictOptions.appGoodsInfoOptions);
 		});
 		onMounted(async () => {});
-
 		return {
 			refs,
 			setRefs,

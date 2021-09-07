@@ -38,7 +38,7 @@ export const DemoGoOtherDict: any[] = [
 		type: "success"
 	}
 ];
-//其他状态#s1:已激活,s2a2:未激活#IsDictColumn,IsSearchParams
+//其他状态2#s1:已激活,s2a2:未激活#IsDictColumn,IsSearchParams
 export const DemoGoOtherStrDict: any[] = [
 	{
 		label: "已激活",
