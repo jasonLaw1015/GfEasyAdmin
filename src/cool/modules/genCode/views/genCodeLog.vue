@@ -51,8 +51,12 @@
 			<cl-table :ref="setRefs('table')" v-bind="table">
 				<!-- tables -->
 				<template #column-tables="{ scope }">
-					<span v-for="(item, k) in scope.row.tables.split(`,`)" :key="k">
-						<el-tag type="success">{{ item }}</el-tag>
+					<span
+						style="margin-right: 10px"
+						v-for="(item, k) in scope.row.tables.split(`,`)"
+						:key="k"
+					>
+						<el-tag size="mini" type="primary">{{ item }}</el-tag>
 					</span>
 				</template>
 				<template #slot-other="{ scope }">
@@ -251,7 +255,8 @@ export default defineComponent({
 				{
 					prop: "tables",
 					label: "生成的表",
-					align: "center"
+					align: "center",
+					minWidth: 150
 				},
 				{
 					prop: "params",
