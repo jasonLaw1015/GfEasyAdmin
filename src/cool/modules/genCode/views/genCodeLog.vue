@@ -89,8 +89,9 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import dayjs from "dayjs";
 import axios from "axios";
 //@ts-ignore
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import CheckboxGroup from "../components/checkbox/group.vue";
+import { storage } from "/@/core/utils";
 
 const GenHost = "http://127.0.0.1:9000";
 
@@ -107,7 +108,7 @@ export default defineComponent({
 		let state = reactive<any>({ optionsList: [{}], hasActiveCode: -1 });
 		const DictRef = reactive<any>(Dict);
 		//已使用生成数量
-		let usedGenNum = ref("0");
+		let usedGenNum = ref(0);
 		const condition = ref<any>({
 			types: "",
 			status: "",
@@ -116,7 +117,15 @@ export default defineComponent({
 		//非激活用户-限制生成代码次数
 		const LimitGenNum = ref(3);
 		onMounted(() => {
-			usedGenNum.value = Cookies.get("usedGenNum") || "0";
+			//过期
+			if (storage.isExpired("usedGenNum")) {
+				console.log("过期", storage.get("usedGenNum"), storage.isExpired("usedGenNum"));
+				usedGenNum.value = 0;
+			} else {
+				console.log("未过期", storage.get("usedGenNum"), storage.isExpired("usedGenNum"));
+
+				usedGenNum.value = storage.get("usedGenNum") || 0;
+			}
 		});
 		// 新增、编辑配置
 		const upsert = reactive<Upsert>({
@@ -330,6 +339,7 @@ export default defineComponent({
 				});
 
 			refs.value.form.open({
+				title: "配置1",
 				width: "80%",
 				pros: {},
 				items: [
@@ -513,6 +523,7 @@ export default defineComponent({
 						component: {
 							name: "el-input",
 							props: {
+								"show-password": true,
 								placeholder: "请输入激活码"
 							}
 						}
@@ -641,7 +652,7 @@ export default defineComponent({
 						delete params.tables;
 						//没激活码
 						if (config.activeCode == "") {
-							if (Number(usedGenNum.value) <= LimitGenNum.value) {
+							if (Number(usedGenNum.value) < LimitGenNum.value) {
 								PostBatchGenCode(params);
 							} else {
 								ElMessage.error(
@@ -690,11 +701,19 @@ export default defineComponent({
 
 					//判断没激活码的才要记录cookie值
 					if (config.activeCode == "") {
+						const temp = Number(usedGenNum.value) + 1;
 						if (Number(usedGenNum.value) > 0) {
-							Cookies.set("usedGenNum", Number(usedGenNum.value) + 1);
+							storage.set("usedGenNum", temp);
+							// Cookies.set("usedGenNum", temp);
 						} else {
-							Cookies.set("usedGenNum", Number(usedGenNum.value) + 1, { expires: 1 });
+							// var exp = dayjs().add(10, "second").toDate();
+							//30s
+							storage.set("usedGenNum", temp, 600);
+							// Cookies.set("usedGenNum", temp, {
+							// 	expires: exp
+							// });
 						}
+						usedGenNum.value = temp;
 					}
 
 					ElMessageBox.confirm("生成成功", "提示", {
