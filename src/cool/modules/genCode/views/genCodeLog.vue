@@ -51,7 +51,7 @@
 			<cl-table :ref="setRefs('table')" v-bind="table">
 				<!-- tables -->
 				<template #column-tables="{ scope }">
-					<span v-for="(k, item) in scope.row.tables.split(`,`)" :key="k">
+					<span v-for="(item, k) in scope.row.tables.split(`,`)" :key="k">
 						<el-tag type="success">{{ item }}</el-tag>
 					</span>
 				</template>
