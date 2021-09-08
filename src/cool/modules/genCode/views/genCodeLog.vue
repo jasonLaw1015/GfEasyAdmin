@@ -708,7 +708,7 @@ export default defineComponent({
 						} else {
 							// var exp = dayjs().add(10, "second").toDate();
 							//30s
-							storage.set("usedGenNum", temp, 600);
+							storage.set("usedGenNum", temp, 60 * 60 * 24);
 							// Cookies.set("usedGenNum", temp, {
 							// 	expires: exp
 							// });
