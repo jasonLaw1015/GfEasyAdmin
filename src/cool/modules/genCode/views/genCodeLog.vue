@@ -49,6 +49,12 @@
 		<el-row>
 			<!-- 数据表格 -->
 			<cl-table :ref="setRefs('table')" v-bind="table">
+				<!-- tables -->
+				<template #column-tables="{ scope }">
+					<span v-for="(k, item) in scope.row.tables.split(`,`)" :key="k">
+						<el-tag type="success">{{ item }}</el-tag>
+					</span>
+				</template>
 				<template #slot-other="{ scope }">
 					<el-button type="text" size="mini" @click="openSetting(scope.row)">
 						打开表单
