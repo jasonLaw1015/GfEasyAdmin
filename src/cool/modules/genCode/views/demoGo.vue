@@ -147,7 +147,9 @@ export default defineComponent({
 					component: {
 						name: "el-input",
 						props: {
-							placeholder: "请输入标题"
+							placeholder: "请输入标题",
+							rows: 3,
+							type: "textarea"
 						}
 					},
 					rules: {
@@ -161,7 +163,9 @@ export default defineComponent({
 					component: {
 						name: "el-input",
 						props: {
-							placeholder: "请输入副标题"
+							placeholder: "请输入副标题",
+							rows: 3,
+							type: "textarea"
 						}
 					}
 				},

@@ -77,5 +77,12 @@ export default {
 	 */
 	clearAll() {
 		store.clearAll();
+	},
+	/**
+	 * 获取没过期的键值,过期返回null
+	 * @param {string} key 关键字
+	 */
+	getNotExpired(key: string) {
+		return this.isExpired(key) ? null : store.get(key);
 	}
 };

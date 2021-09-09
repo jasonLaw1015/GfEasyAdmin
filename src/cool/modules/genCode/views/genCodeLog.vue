@@ -127,15 +127,8 @@ export default defineComponent({
 		//非激活用户-限制生成代码次数
 		const LimitGenNum = ref(3);
 		onMounted(() => {
-			//过期
-			if (storage.isExpired("usedGenNum")) {
-				console.log("过期", storage.get("usedGenNum"), storage.isExpired("usedGenNum"));
-				usedGenNum.value = 0;
-			} else {
-				console.log("未过期", storage.get("usedGenNum"), storage.isExpired("usedGenNum"));
-
-				usedGenNum.value = storage.get("usedGenNum") || 0;
-			}
+			const tempNum = storage.getNotExpired("usedGenNum");
+			usedGenNum.value = tempNum ? tempNum : 0;
 		});
 		// 新增、编辑配置
 		const upsert = reactive<Upsert>({
