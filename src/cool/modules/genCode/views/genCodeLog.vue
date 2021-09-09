@@ -39,6 +39,7 @@
 			<!-- 新增按钮 -->
 			<!-- <cl-add-btn>3、开始选择表生成代码</cl-add-btn> -->
 			<cl-flex1 />
+			<el-button type="success" size="mini" @click="getActiveCode">立即获取激活码</el-button>
 		</el-row>
 		<el-row type="flex" align="middle">
 			<el-link>生成代码日志</el-link>
@@ -673,7 +674,12 @@ export default defineComponent({
 				}
 			});
 		}
+		function getActiveCode() {
+			// https://www.yuque.com/docs/share/f0d8cced-cbcf-45b0-97b8-0360f5819a26?# 《GoEasy 代码生成激活码获取》
 
+			const href = "https://www.yuque.com/docs/share/f0d8cced-cbcf-45b0-97b8-0360f5819a26";
+			window.open(href, "_blank");
+		}
 		//request 获取生成配置是否正确
 		function PostGenCheck(config: any) {
 			axios
@@ -765,6 +771,7 @@ export default defineComponent({
 			openSetting1,
 			openSetting2,
 			openSetting3,
+			getActiveCode,
 			goTo,
 			onLoad,
 			state,
