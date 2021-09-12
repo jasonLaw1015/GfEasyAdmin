@@ -453,7 +453,10 @@ export default defineComponent({
 			try {
 				const res = await service.appGoodsInfo.list();
 				DictOptions.appGoodsInfoOptions = res.map((i: any) => {
-					return { label: i.name || i.title || i.id, value: i.id };
+					return {
+						label: i.name || i.title || i.username || i.nickName || i.nickname || i.id,
+						value: i.id
+					};
 				});
 			} catch (error: any) {
 				ElMessage.error(error);
