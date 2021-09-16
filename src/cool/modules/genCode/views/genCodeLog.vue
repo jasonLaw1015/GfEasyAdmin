@@ -675,7 +675,7 @@ export default defineComponent({
 			});
 		}
 		function getActiveCode() {
-			// https://www.yuque.com/docs/share/f0d8cced-cbcf-45b0-97b8-0360f5819a26?# 《GoEasy 代码生成激活码获取》
+			// https://www.yuque.com/docs/share/f0d8cced-cbcf-45b0-97b8-0360f5819a26?# 《GfEasy 代码生成激活码获取》
 
 			const href = "https://www.yuque.com/docs/share/f0d8cced-cbcf-45b0-97b8-0360f5819a26";
 			window.open(href, "_blank");

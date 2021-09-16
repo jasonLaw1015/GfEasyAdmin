@@ -32,7 +32,7 @@ const iconfontUrl = ``;
 
 // 程序配置参数
 const app: any = store.get("__app__") || {
-	name: "GoEasyAdmin",
+	name: "GfEasyAdmin",
 
 	conf: {
 		showAMenu: false, // 是否显示一级菜单栏
