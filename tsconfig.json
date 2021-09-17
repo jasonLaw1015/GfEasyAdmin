@@ -3,6 +3,7 @@
 		"target": "esnext",
 		"module": "esnext",
 		"moduleResolution": "node",
+        "baseUrl": "./",
 		"strict": true,
 		"jsx": "preserve",
 		"sourceMap": true,
