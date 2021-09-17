@@ -21,7 +21,6 @@
 		"file-saver": "^2.0.5",
 		"glob": "^7.1.6",
 		"js-beautify": "^1.13.5",
-		"js-cookie": "^3.0.0",
 		"merge": "^2.1.1",
 		"mitt": "^2.1.0",
 		"mockjs": "^1.1.0",
