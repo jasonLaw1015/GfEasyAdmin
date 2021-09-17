@@ -125,13 +125,19 @@ gf build
 一般选择amd64。你可以运行go env 查看到你本机是哪个，自己选择那个
 
 darwin=>mac
+
 linux=>linux
+
 windows=>windows
 
+------
 ## 后台前端Vue
 
-***必须安装：
-操作系统上安装了 Node.js（> = 8.9.0）、@vue/cli
+**必须安装：**
+
+操作系统上安装了 Node.js（> = 12.1.0）、@vue/cli。
+
+我用的是node 是14.17.6
 
 ---
 
@@ -216,7 +222,9 @@ https://www.yuque.com/docs/share/3e714752-0de1-43e2-96e4-461f4e74fc93?# 《代�
 
 运行结果：
 出现以下截图即正确
+
 ![genCodeLog.png](screenshot/genCodeLog.png)
+
 #### 知识讲解：
 
 ##### GOOS : 目标平台
@@ -232,11 +240,19 @@ arm 这种架构一般用于嵌入式开发。 比如 Android ， IOS ， Win mo
 
 ### 界面操作
 进入系统-》/核心工具/代码生成工具
+
 ![img_5.png](screenshot/screenshot2/img_5.png)
 
 然后按步骤123，配置相关参数
 步骤1：配置所需要环境参数
+-----
+**注意：**
+下图的生成代码目录的是mac端的，
+windows端要写成\，反斜杠。
 
+如：D:\develop\go\src\gitee.com\jasonLaw1015\GfEasyAdmin\
+
+-------
 ![img.png](screenshot/screenshot2/代码生成配置1.png)
 
 步骤2：检测下步骤1的数据是否可行
@@ -244,6 +260,7 @@ arm 这种架构一般用于嵌入式开发。 比如 Android ， IOS ， Win mo
 ![img_16.png](screenshot/img_16.png)
 
 步骤3：开始生成代码
+
 ![img_17.png](screenshot/img_17.png)
 
 确认后：
