@@ -130,9 +130,7 @@ export default defineComponent({
 		const service = inject<any>("service");
 		const DictRef = reactive<any>(Dict);
 		//外键的查询的options
-		const DictOptions = reactive<any>({
-			appGoodsInfoOptions: []
-		});
+		const DictOptions = reactive<any>({});
 		const condition = reactive<any>({
 			types: "",
 			status: "",
@@ -238,15 +236,17 @@ export default defineComponent({
 					}
 				},
 				{
-					prop: "appGoodsInfoId",
-					label: "appGoodsInfoID",
-					span: 12,
+					prop: "woshitebie",
+					label: "我是别特别描述",
 					component: {
-						name: "el-select",
+						name: "el-input",
 						props: {
-							// multiple: true
-						},
-						options: []
+							placeholder: "请输入我是别特别描述"
+						}
+					},
+					rules: {
+						required: true,
+						message: "我是别特别描述标题不能为空"
 					}
 				}
 			]
@@ -329,9 +329,8 @@ export default defineComponent({
 					align: "center"
 				},
 				{
-					prop: "appGoodsInfoId",
-					label: "appGoodsInfoID",
-					dict: DictOptions.appGoodsInfoOptions,
+					prop: "woshitebie",
+					label: "我是别特别描述",
 					align: "center"
 				},
 				{
@@ -449,24 +448,7 @@ export default defineComponent({
 			});
 		}
 		//外键所需的options数据
-		async function getAppGoodsInfoOptions() {
-			try {
-				const res = await service.appGoodsInfo.list();
-				DictOptions.appGoodsInfoOptions = res.map((i: any) => {
-					return {
-						label: i.name || i.title || i.username || i.nickName || i.nickname || i.id,
-						value: i.id
-					};
-				});
-			} catch (error: any) {
-				ElMessage.error(error);
-			}
-		}
-		onBeforeMount(async () => {
-			await getAppGoodsInfoOptions();
-			//手动处理数据
-			setTableUpsertOptions(table, upsert, "appGoodsInfoId", DictOptions.appGoodsInfoOptions);
-		});
+		onBeforeMount(async () => {});
 		onMounted(async () => {});
 		return {
 			refs,
