@@ -36,7 +36,7 @@ bootstrap(app)
 		app.use(store).use(router).use(ElementPlus, { locale }).mount("#app");
 	})
 	.catch((err: string) => {
-		console.error(`GO-EASY-ADMIN 启动失败`, err);
+		console.error(`Gf-EASY-ADMIN 启动失败`, err);
 	});
 
 store.dispatch("appLoad");
