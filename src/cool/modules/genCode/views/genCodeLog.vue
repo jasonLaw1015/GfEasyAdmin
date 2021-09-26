@@ -529,7 +529,7 @@ export default defineComponent({
 							name: "el-input",
 							props: {
 								"show-password": true,
-								placeholder: "请输入激活码"
+								placeholder: "请输入激活码，非必选。为空时，每天有三次免费代码生成机会"
 							}
 						}
 					}
