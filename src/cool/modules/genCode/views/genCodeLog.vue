@@ -39,7 +39,7 @@
 			<!-- 新增按钮 -->
 			<!-- <cl-add-btn>3、开始选择表生成代码</cl-add-btn> -->
 			<cl-flex1 />
-			<el-button type="success" size="mini" @click="getActiveCode">立即获取激活码</el-button>
+			<!-- <el-button type="success" size="mini" @click="getActiveCode">立即获取激活码</el-button> -->
 		</el-row>
 		<el-row type="flex" align="middle">
 			<el-link>生成代码日志</el-link>
@@ -81,12 +81,15 @@
 		/>
 		<!-- 表单 -->
 		<cl-form :ref="setRefs('form')">
-			<template #slot-tables="{ scope }">
+			<!-- <template #slot-tables="{ scope }">
 				<checkbox-group
 					:maxNum="state.hasActiveCode == -1 ? 1 : -1"
 					v-model="scope.tables"
 					:options="state.optionsList"
 				/>
+			</template> -->
+			<template #slot-tables="{ scope }">
+				<checkbox-group v-model="scope.tables" :options="state.optionsList" />
 			</template>
 		</cl-form>
 	</cl-crud>
@@ -520,19 +523,19 @@ export default defineComponent({
 							required: true,
 							message: "忽略此前缀的表，逗号分隔标题不能为空"
 						}
-					},
-					{
-						prop: "activeCode",
-						label: "激活码",
-						value: row.activeCode,
-						component: {
-							name: "el-input",
-							props: {
-								"show-password": true,
-								placeholder: "请输入激活码，非必选。为空时，每天有三次免费代码生成机会"
-							}
-						}
 					}
+					// {
+					// 	prop: "activeCode",
+					// 	label: "激活码",
+					// 	value: row.activeCode,
+					// 	component: {
+					// 		name: "el-input",
+					// 		props: {
+					// 			"show-password": true,
+					// 			placeholder: "请输入激活码"
+					// 		}
+					// 	}
+					// }
 				],
 				on: {
 					submit: (data: any, { close, done }: any) => {
@@ -590,17 +593,17 @@ export default defineComponent({
 			}
 			console.log({ config });
 			let title = "生成代码:";
-			if (config.activeCode == "") {
-				title =
-					title +
-					"(最大使用数量：" +
-					LimitGenNum.value +
-					"，已使用数量：" +
-					usedGenNum.value +
-					"）";
-			} else {
-				state.hasActiveCode = 1;
-			}
+			// if (config.activeCode == "") {
+			// 	title =
+			// 		title +
+			// 		"(最大使用数量：" +
+			// 		LimitGenNum.value +
+			// 		"，已使用数量：" +
+			// 		usedGenNum.value +
+			// 		"）";
+			// } else {
+			// 	state.hasActiveCode = 1;
+			// }
 			//打开表单
 			refs.value.form.open({
 				title,
@@ -655,18 +658,19 @@ export default defineComponent({
 						let params = { ...data, ...config };
 						params.tableNames = data.tables ? data.tables.join(",") : "";
 						delete params.tables;
-						//没激活码
-						if (config.activeCode == "") {
-							if (Number(usedGenNum.value) < LimitGenNum.value) {
-								PostBatchGenCode(params);
-							} else {
-								ElMessage.error(
-									"未有激活的用户，每天只能使用" + LimitGenNum.value + "次"
-								);
-							}
-						} else {
-							PostBatchGenCode(params);
-						}
+						// //没激活码
+						// if (config.activeCode == "") {
+						// 	if (Number(usedGenNum.value) < LimitGenNum.value) {
+						// 		PostBatchGenCode(params);
+						// 	} else {
+						// 		ElMessage.error(
+						// 			"未有激活的用户，每天只能使用" + LimitGenNum.value + "次"
+						// 		);
+						// 	}
+						// } else {
+						// 	PostBatchGenCode(params);
+						// }
+						PostBatchGenCode(params);
 
 						done();
 						close();
@@ -709,22 +713,22 @@ export default defineComponent({
 				.then(function (response) {
 					console.log(response);
 
-					//判断没激活码的才要记录cookie值
-					if (config.activeCode == "") {
-						const temp = Number(usedGenNum.value) + 1;
-						if (Number(usedGenNum.value) > 0) {
-							storage.set("usedGenNum", temp);
-							// Cookies.set("usedGenNum", temp);
-						} else {
-							// var exp = dayjs().add(10, "second").toDate();
-							//30s
-							storage.set("usedGenNum", temp, 60 * 60 * 24);
-							// Cookies.set("usedGenNum", temp, {
-							// 	expires: exp
-							// });
-						}
-						usedGenNum.value = temp;
-					}
+					// //判断没激活码的才要记录cookie值
+					// if (config.activeCode == "") {
+					// 	const temp = Number(usedGenNum.value) + 1;
+					// 	if (Number(usedGenNum.value) > 0) {
+					// 		storage.set("usedGenNum", temp);
+					// 		// Cookies.set("usedGenNum", temp);
+					// 	} else {
+					// 		// var exp = dayjs().add(10, "second").toDate();
+					// 		//30s
+					// 		storage.set("usedGenNum", temp, 60 * 60 * 24);
+					// 		// Cookies.set("usedGenNum", temp, {
+					// 		// 	expires: exp
+					// 		// });
+					// 	}
+					// 	usedGenNum.value = temp;
+					// }
 
 					ElMessageBox.confirm("生成成功", "提示", {
 						confirmButtonText: "确定",
